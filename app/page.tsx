@@ -1,47 +1,47 @@
 "use client";
-import { useEffect } from "react";
+
+import { useState } from "react";
 
 export default function Home() {
-  useEffect(() => {
-    const target = new Date("2025-09-01").getTime(); // Set launch date
-    const countdownEl = document.getElementById("countdown");
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = target - now;
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      if (countdownEl)
-        countdownEl.innerText = `${days}d : ${hours}h : ${minutes}m : ${seconds}s`;
-
-      if (distance < 0) {
-        clearInterval(interval);
-        if (countdownEl) countdownEl.innerText = "Launched!";
-      }
-    }, 1000);
-  }, []);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Email submitted:", email); // Replace this with backend later
+    setSubmitted(true);
+    setEmail("");
+  };
 
   return (
-    <div>
-      <h1 style={{ fontSize: "4rem", fontWeight: "bold" }}>ZIVEK</h1>
-      <h2 style={{ fontSize: "1.8rem", marginTop: "10px" }}>Coming Soon</h2>
-      <p style={{ marginTop: "10px", fontSize: "1.2rem" }}>
-        Your trusted home services, reimagined
-      </p>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-teal-600 text-white text-center px-6">
+      <h1 className="text-6xl font-extrabold tracking-widest mb-4 animate-glow">
+        Z I V E K
+      </h1>
+      <p className="text-2xl mb-8 animate-pulse">Coming Soon</p>
 
-      {/* Countdown */}
-      <div style={{ fontSize: "2rem", margin: "20px 0" }} id="countdown">
-        00d : 00h : 00m : 00s
-      </div>
+      {!submitted ? (
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-3">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            className="p-3 rounded-lg text-black w-72"
+            required
+          />
+          <button
+            type="submit"
+            className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+          >
+            Notify Me
+          </button>
+        </form>
+      ) : (
+        <p className="mt-4 text-lg">Thanks! We’ll notify you when we launch.</p>
+      )}
 
-      {/* Email Notify */}
-      <input type="email" placeholder="Enter your email" />
-      <br />
-      <button>Notify Me</button>
+      <p className="mt-6 text-sm opacity-80">We respect your privacy. No spam ever.</p>
     </div>
   );
 }
