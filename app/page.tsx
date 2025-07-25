@@ -4,65 +4,62 @@ import { useState } from "react";
 export default function ComingSoon() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setMessage("Submitting...");
-  try {
-    const response = await fetch("/api/notify", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ email }),
-});
+    e.preventDefault();
+    if (!email) return setMessage("nirmaljosekutty@gmail.com");
 
-    const text = await response.text(); // Get raw response first
-    console.log("Raw response:", text);
+    setLoading(true);
+    setMessage("");
 
-    let result;
     try {
-      result = JSON.parse(text);
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setMessage("🎉 Thank you! We’ll notify you soon.");
+        setEmail("");
+      } else {
+        setMessage("⚠️ Failed: " + data.message);
+      }
     } catch {
-      throw new Error("Invalid JSON response");
+      setMessage("⚠️ Error submitting. Try again.");
     }
-
-    if (result.status === "success") {
-      setMessage("Thank you! You'll be notified.");
-      setEmail("");
-    } else {
-      setMessage("Error: " + result.message);
-    }
-  } catch (error) {
-    console.error(error);
-    setMessage("Something went wrong!");
-  }
-};
-
+    setLoading(false);
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-teal-600 text-white text-center px-4">
-      <h1 className="text-6xl font-bold tracking-wider mb-4">ZIVEK</h1>
-      <h2 className="text-3xl font-semibold mb-6 animate-pulse">Coming Soon</h2>
-      <p className="mb-8 text-lg">Your trusted home services, reimagined.</p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col sm:flex-row gap-4 w-full max-w-md"
-      >
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          className="p-3 rounded-md text-black flex-1"
-          required
-        />
-        <button
-          type="submit"
-          className="bg-white text-teal-600 px-6 py-3 rounded-md hover:bg-gray-100 transition"
-        >
-          Notify Me
-        </button>
-      </form>
-      {message && <p className="mt-4">{message}</p>}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-teal-600 to-teal-300 p-6">
+      <div className="bg-white shadow-xl rounded-2xl p-8 max-w-md w-full">
+        <h1 className="text-2xl font-bold text-center text-teal-700 mb-4">Coming Soon 🚀</h1>
+        <p className="text-center text-gray-600 mb-6">Sign up to get notified when we launch!</p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-lg transition disabled:opacity-50"
+          >
+            {loading ? "Submitting..." : "Notify Me"}
+          </button>
+        </form>
+
+        {message && (
+          <p className="mt-4 text-center text-gray-700">{message}</p>
+        )}
+      </div>
     </div>
   );
 }
