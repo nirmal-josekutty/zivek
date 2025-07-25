@@ -6,24 +6,27 @@ export default function ComingSoon() {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessage("Submitting...");
-    try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbz078_aaUPfl6pF8oDlQ7IsDjy0sDy2qavhpQFGi-cychOtkM9ophXZjLOz9PKPHjHdmQ/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ email }).toString(),
-      });
-      if (response.ok) {
-        setMessage("Thank you! You'll be notified.");
-        setEmail("");
-      } else {
-        setMessage("Error! Try again later.");
-      }
-    } catch (error) {
-      setMessage("Something went wrong!");
+  e.preventDefault();
+  setMessage("Submitting...");
+  try {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbx2n4yE44GI55j-Bo90BkxIk05OIARohBpkJcZjwHZtthg2sZqOFpGYC8vmqu3w4qhJCg/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await response.json();
+    if (result.status === "success") {
+      setMessage("Thank you! You'll be notified.");
+      setEmail("");
+    } else {
+      setMessage("Error! Try again later.");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    setMessage("Something went wrong!");
+  }
+};
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-teal-600 text-white text-center px-4">
