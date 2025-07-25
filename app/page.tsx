@@ -9,24 +9,34 @@ export default function ComingSoon() {
   e.preventDefault();
   setMessage("Submitting...");
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbx2n4yE44GI55j-Bo90BkxIk05OIARohBpkJcZjwHZtthg2sZqOFpGYC8vmqu3w4qhJCg/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycby2ewzHEs-EAdYiT55BGfaHrkRnZGbG5M1ybvX-vsWEA86J8k2hbEjukv6CXBUSHLRCmw/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
 
-    const result = await response.json();
+    const text = await response.text(); // Get raw response first
+    console.log("Raw response:", text);
+
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch {
+      throw new Error("Invalid JSON response");
+    }
+
     if (result.status === "success") {
       setMessage("Thank you! You'll be notified.");
       setEmail("");
     } else {
-      setMessage("Error! Try again later.");
+      setMessage("Error: " + result.message);
     }
   } catch (error) {
     console.error(error);
     setMessage("Something went wrong!");
   }
 };
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-teal-600 text-white text-center px-4">
