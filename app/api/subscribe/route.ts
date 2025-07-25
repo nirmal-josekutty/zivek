@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
     // Your secret key (kept server-side only)
     const SECRET_KEY = "12hdy4jfn6sdgsdh";
-    const SCRIPT_URL = "https://script.google.com/macros/library/d/17x-8cesMLHJEh6XkEe9UiVolV2Fd19RABgGgpZt-30W1SAeHbC41jorw/8";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-JK0B8KvS2KbYIny0sMNIstTdHkcwf2wW_0fqRguQFkhZkGObmUHaUOTEeW-cT72U5w/exec";
 
     const response = await fetch(`${SCRIPT_URL}?key=${SECRET_KEY}`, {
       method: "POST",
