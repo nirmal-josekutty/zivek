@@ -9,11 +9,11 @@ export default function ComingSoon() {
   e.preventDefault();
   setMessage("Submitting...");
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbyGEHH0n3akMSStU2eoxxc7MV70Kdlqawt61Jlmd5D8KD7Lqwbo_r9kE7Ee3rPrIBDvhw/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    const response = await fetch("/api/notify", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email }),
+});
 
     const text = await response.text(); // Get raw response first
     console.log("Raw response:", text);
