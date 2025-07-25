@@ -1,47 +1,55 @@
 "use client";
-
 import { useState } from "react";
 
-export default function Home() {
+export default function ComingSoon() {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email submitted:", email); // Replace this with backend later
-    setSubmitted(true);
-    setEmail("");
+    setMessage("Submitting...");
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbz078_aaUPfl6pF8oDlQ7IsDjy0sDy2qavhpQFGi-cychOtkM9ophXZjLOz9PKPHjHdmQ/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ email }).toString(),
+      });
+      if (response.ok) {
+        setMessage("Thank you! You'll be notified.");
+        setEmail("");
+      } else {
+        setMessage("Error! Try again later.");
+      }
+    } catch (error) {
+      setMessage("Something went wrong!");
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-teal-600 text-white text-center px-6">
-      <h1 className="text-6xl font-extrabold tracking-widest mb-4 animate-glow">
-        Z I V E K
-      </h1>
-      <p className="text-2xl mb-8 animate-pulse">Coming Soon</p>
-
-      {!submitted ? (
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-3">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="p-3 rounded-lg text-black w-72"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-white text-teal-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
-          >
-            Notify Me
-          </button>
-        </form>
-      ) : (
-        <p className="mt-4 text-lg">Thanks! We’ll notify you when we launch.</p>
-      )}
-
-      <p className="mt-6 text-sm opacity-80">We respect your privacy. No spam ever.</p>
+    <div className="flex flex-col items-center justify-center h-screen bg-teal-600 text-white text-center px-4">
+      <h1 className="text-6xl font-bold tracking-wider mb-4">ZIVEK</h1>
+      <h2 className="text-3xl font-semibold mb-6 animate-pulse">Coming Soon</h2>
+      <p className="mb-8 text-lg">Your trusted home services, reimagined.</p>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col sm:flex-row gap-4 w-full max-w-md"
+      >
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          className="p-3 rounded-md text-black flex-1"
+          required
+        />
+        <button
+          type="submit"
+          className="bg-white text-teal-600 px-6 py-3 rounded-md hover:bg-gray-100 transition"
+        >
+          Notify Me
+        </button>
+      </form>
+      {message && <p className="mt-4">{message}</p>}
     </div>
   );
 }
