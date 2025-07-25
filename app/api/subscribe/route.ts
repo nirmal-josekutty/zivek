@@ -8,8 +8,8 @@ export async function POST(req: Request) {
     }
 
     // Your secret key (kept server-side only)
-    const SECRET_KEY = "12hsdjvdfh65dggsdh";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzC0V4Bq3geb1QNG0sFVH9qrUcC2MHEff6pvVBfM-JNfan88XdVxvQ5nN1ww0wKMb1t2A/exec";
+    const SECRET_KEY = "12hdy4jfn6sdgsdh";
+    const SCRIPT_URL = "https://script.google.com/macros/library/d/17x-8cesMLHJEh6XkEe9UiVolV2Fd19RABgGgpZt-30W1SAeHbC41jorw/8";
 
     const response = await fetch(`${SCRIPT_URL}?key=${SECRET_KEY}`, {
       method: "POST",
