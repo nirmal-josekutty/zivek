@@ -9,7 +9,7 @@ export default function ComingSoon() {
   e.preventDefault();
   setMessage("Submitting...");
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycby2ewzHEs-EAdYiT55BGfaHrkRnZGbG5M1ybvX-vsWEA86J8k2hbEjukv6CXBUSHLRCmw/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbwRbTWqBrn5auKrksdQztdl9GS005__TSz0kzMND2f-Je_Z3S_7GkwfPnrSJ-aLMKIsrg/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
